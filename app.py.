@@ -3,9 +3,10 @@ import time
 import json
 from groq import Groq
 
-# --------------------------------------------------
+
+# ============================================================
 # PAGE CONFIGURATION
-# --------------------------------------------------
+# ============================================================
 
 st.set_page_config(
     page_title="Idiofy Launch Syndicate",
@@ -20,9 +21,10 @@ st.write(
     "by balancing Product Management and Brand Strategy."
 )
 
-# --------------------------------------------------
+
+# ============================================================
 # GROQ API CONFIGURATION
-# --------------------------------------------------
+# ============================================================
 
 try:
     api_key = st.secrets["GROQ_API_KEY"]
@@ -36,9 +38,10 @@ except Exception:
 
 client = Groq(api_key=api_key)
 
-# --------------------------------------------------
+
+# ============================================================
 # AGENT FUNCTION
-# --------------------------------------------------
+# ============================================================
 
 def run_agent(persona, prompt_input, json_mode=False):
 
@@ -69,9 +72,9 @@ def run_agent(persona, prompt_input, json_mode=False):
     return response.choices[0].message.content, latency
 
 
-# --------------------------------------------------
+# ============================================================
 # USER INPUT
-# --------------------------------------------------
+# ============================================================
 
 raw_idea = st.text_input(
     "Enter your raw product or startup idea:",
@@ -81,9 +84,10 @@ raw_idea = st.text_input(
     )
 )
 
-# --------------------------------------------------
+
+# ============================================================
 # START MULTI-AGENT PIPELINE
-# --------------------------------------------------
+# ============================================================
 
 if st.button(
     "🚀 Initiate Multi-Agent Launch Sprint",
@@ -139,6 +143,7 @@ Do not add conversational text.
             ):
                 st.write(research)
 
+
             # ==================================================
             # AGENT 2 — TECHNICAL PRODUCT MANAGER
             # ==================================================
@@ -178,6 +183,7 @@ Ruthlessly cut feature bloat.
             ):
                 st.write(tech_scope)
 
+
             # ==================================================
             # AGENT 3 — BRAND STRATEGIST
             # ==================================================
@@ -210,6 +216,7 @@ Brand Tone: [3 keywords, e.g., Playful, Trustworthy, Bold]
                 f"Brand Strategy ({latency}s)"
             ):
                 st.write(brand_strategy)
+
 
             # ==================================================
             # AGENT 4 — QUALITY GATE CRITIC
@@ -251,6 +258,7 @@ BRAND STRATEGY:
                 f"Critique ({latency}s)"
             ):
                 st.write(critique)
+
 
             # ==================================================
             # AGENT 5 — LEAD SYNTHESIZER
@@ -299,6 +307,7 @@ CRITIQUE:
 
             total_latency += latency
 
+
             # ==================================================
             # COMPLETE
             # ==================================================
@@ -306,12 +315,12 @@ CRITIQUE:
             status.update(
                 label=(
                     f"Launch Sprint Complete! "
-                    f"Total Latency: "
-                    f"{round(total_latency, 2)}s"
+                    f"Total Latency: {round(total_latency, 2)}s"
                 ),
                 state="complete",
                 expanded=False
             )
+
 
         # ======================================================
         # DISPLAY FINAL RESULT
@@ -358,4 +367,3 @@ CRITIQUE:
             )
 
             st.markdown(final_brief)
-
