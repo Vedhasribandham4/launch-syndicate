@@ -1,10 +1,7 @@
-%%writefile app.py
-
 import streamlit as st
 import time
 import json
 from groq import Groq
-from google.colab import userdata
 
 # --------------------------------------------------
 # PAGE CONFIGURATION
@@ -24,13 +21,17 @@ st.write(
 )
 
 # --------------------------------------------------
-# GROQ API
+# GROQ API CONFIGURATION
 # --------------------------------------------------
 
-api_key = userdata.get("GROQ_API_KEY")
-
-if not api_key:
-    st.error("⚠️ GROQ_API_KEY is missing from Colab Secrets.")
+try:
+    api_key = st.secrets["GROQ_API_KEY"]
+except Exception:
+    st.error("⚠️ GROQ_API_KEY is missing.")
+    st.info(
+        "Go to Streamlit Cloud → App Settings → Secrets "
+        "and add your GROQ_API_KEY."
+    )
     st.stop()
 
 client = Groq(api_key=api_key)
@@ -230,7 +231,7 @@ between the technical scope and brand promises.
 
 If none, state:
 
-No conflicts identified
+No conflicts identified.
 """
 
             critique, latency = run_agent(
@@ -312,9 +313,9 @@ CRITIQUE:
                 expanded=False
             )
 
-        # ==================================================
+        # ======================================================
         # DISPLAY FINAL RESULT
-        # ==================================================
+        # ======================================================
 
         try:
 
@@ -352,6 +353,9 @@ CRITIQUE:
 
         except json.JSONDecodeError:
 
-            st.error("The final agent did not return valid JSON.")
+            st.error(
+                "The final agent did not return valid JSON."
+            )
 
             st.markdown(final_brief)
+
